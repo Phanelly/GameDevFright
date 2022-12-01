@@ -26,7 +26,7 @@ public class CollectibleController : MonoBehaviour
     {
         var script = player.GetComponent<NewCharacterController>();
 
-        script.collectiblesCount++;
+        script.AddScore();
 
         Destroy(this.gameObject);
     }

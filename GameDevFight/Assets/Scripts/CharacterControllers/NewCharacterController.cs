@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NewCharacterController : MonoBehaviour
 {
-    public int collectiblesCount = 0;
 
     [Header("Movement")]
     [SerializeField] private float movementSpeed = 200f;
@@ -13,11 +13,16 @@ public class NewCharacterController : MonoBehaviour
     [Header("Ground")]
     [SerializeField] private Vector2 groundCheckSize;
     [SerializeField] private LayerMask groundMask;
-    private Transform groundCheck;
+    [SerializeField] private Transform groundCheck;
 
     [Header("Art")]
     [SerializeField] private SpriteRenderer sp;
     [SerializeField] private bool facingRight = true;
+
+    [Header("Collectible")]
+    [SerializeField] private Text scoreText; 
+    private int collectiblesCount = 0;
+    private AudioSource collectibleSound;
 
     private float horizontal;
     private bool jump = false;
@@ -31,7 +36,7 @@ public class NewCharacterController : MonoBehaviour
         t = GetComponent<Transform>();
         rb = GetComponent<Rigidbody2D>();
 
-        groundCheck = GetComponentsInChildren<Transform>()[1];
+        collectibleSound = GetComponent<AudioSource>();
     }
 
 
@@ -60,7 +65,7 @@ public class NewCharacterController : MonoBehaviour
         }
     }
 
-    bool IsGrounded()
+    private bool IsGrounded()
     {
         Collider2D collider = Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, groundMask);
 
@@ -73,10 +78,18 @@ public class NewCharacterController : MonoBehaviour
         t.Rotate(0f, 180f, 0f);
     }
 
+    public void AddScore()
+    {
+        collectiblesCount++;
 
-    /*private void OnDrawGizmosSelected()
+        scoreText.text = collectiblesCount.ToString();
+
+        collectibleSound.Play();
+    }
+
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color(1, 1, 0, 0.75F);
         Gizmos.DrawWireCube(groundCheck.position, groundCheckSize);
-    }*/
+    }
 }
